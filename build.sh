@@ -7,7 +7,7 @@ export CROSS_COMPILE="/home/arn4v/velvet/toolchains/aarch64-linux-android-6.0-ke
 kernel="velvet"
 version="r3.1"
 vendor="xiaomi"
-device="mido-los"
+device="mido-beta"
 zip=zip
 date=`date +"%Y%m%d-%H%M"`
 config=mido_defconfig
@@ -58,6 +58,7 @@ if [ -f arch/arm64/boot/"$kerneltype" ]; then
 	"$CROSS_COMPILE"strip --strip-unneeded "$zip"/modules/*.ko &> /dev/null
         mkdir -p zip/modules/pronto/
         mv zip/modules/wlan.ko zip/modules/pronto/pronto_wlan.ko
+        cp zip/modules/pronto/pronto_wlan.ko zip/modules/wlan.ko
 else
 	echo "Nothing has been made..."
 	read -p "Clean working directory..(y/n)? : " achoice
