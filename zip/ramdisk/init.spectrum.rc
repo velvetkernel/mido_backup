@@ -51,6 +51,8 @@ on property:persist.spectrum.profile=0
     write /sys/module/wake/parameters/enable_wlan_ws N
     # Gentle Fair Sleepers
     write /sys/kernel/sched/gentle_fair_sleepers 1
+    # Enable Fingerprint boost
+    write /sys/kernel/fp_boost/enabled 1
 
 # Performance
 on property:persist.spectrum.profile=1
