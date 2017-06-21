@@ -5,10 +5,10 @@ kernel_dir=$PWD
 build=$kernel_dir/out
 export CROSS_COMPILE="/home/arn4v/velvet/toolchains/aarch64-linux-android-4.9/bin/aarch64-linux-android-"
 kernel="velvet"
-version="r3.1"
+version="t3.91"
 vendor="xiaomi"
 device="mido-stock"
-zip=zip
+zip=$kernel_dir/zip
 date=`date +"%Y%m%d-%H%M"`
 config=mido_defconfig
 kerneltype="Image.gz-dtb"
@@ -52,12 +52,16 @@ fi
 echo "Extracting files..."
 if [ -f arch/arm64/boot/"$kerneltype" ]; then
 	cp arch/arm64/boot/"$kerneltype" "$zip"/"$kerneltype"
-#        mkdir -p zip/modules/pronto
-#	cp drivers/staging/prima/wlan.ko zip/modules/pronto/pronto_wlan.ko
 	find . -name '*.ko' -exec cp {} $modules_dir/ \;
+<<<<<<< HEAD
 	"$CROSS_COMPILE"strip --strip-unneeded "$zip"/modules/*.ko &> /dev/null
         mkdir -p zip/modules/pronto/
         mv zip/modules/wlan.ko zip/modules/pronto/pronto_wlan.ko
+=======
+	"$CROSS_COMPILE"strip --strip-unneeded $modules_dir/*.ko &> /dev/null
+        mkdir -p $modules_dir/pronto/
+        cp $modules_dir/wlan.ko $modules_dir/pronto/pronto_wlan.ko
+>>>>>>> cf1a7f3... Systemless modules, enable modules
 else
 	echo "Nothing has been made..."
 	read -p "Clean working directory..(y/n)? : " achoice
@@ -90,6 +94,9 @@ fi
 
 echo "Zipping..."
 if [ -f "$zip"/"$kerneltype" ]; then
+        cd modules
+        zip -r modules-$zip_name.zip .
+        mv *.zip $build
 	cd "$zip"
 	zip -r ../$zip_name .
 	mv ../$zip_name $build
