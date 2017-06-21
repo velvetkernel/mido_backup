@@ -5,7 +5,7 @@ kernel_dir=$PWD
 build=$kernel_dir/out
 export CROSS_COMPILE="/home/arn4v/velvet/toolchains/aarch64-linux-android-4.9/bin/aarch64-linux-android-"
 kernel="velvet"
-version="t3.91"
+version="t3.95"
 vendor="xiaomi"
 device="mido-stock"
 zip=$kernel_dir/zip
@@ -14,7 +14,7 @@ config=mido_defconfig
 kerneltype="Image.gz-dtb"
 jobcount="-j$(grep -c ^processor /proc/cpuinfo)"
 #modules_dir=$kernel_dir/"$zip"/system/lib/modules
-modules_dir=$kernel_dir/"$zip"/modules
+modules_dir=$kernel_dir/modules/system/lib/modules/
 zip_name="$kernel"-"$version"-"$device".zip
 export KBUILD_BUILD_USER=arnavgosain
 export KBUILD_BUILD_HOST=velvet
@@ -28,6 +28,8 @@ if [ -d arch/arm64/boot/"$kerneltype" ]; then
 			mkdir out
 			rm -rf "$zip"/modules
 			mkdir "$zip"/modules
+			rm -rf $modules_dir
+			mkdir -p $modules_dir
 			export ARCH=arm64
 			make clean && make mrproper
 			echo "Working directory cleaned...";;
@@ -103,7 +105,9 @@ if [ -f "$zip"/"$kerneltype" ]; then
 	rm "$kerneltype"
 	cd ..
 	rm -rf arch/arm64/boot/"$kerneltype"
-	export outdir="$build"
+	export outdir=""$build""
+        export out=""$build""
+        export OUT=""$build""
 	echo "Package complete: "$build"/"$zip_name""
 	exit 0;
 else
