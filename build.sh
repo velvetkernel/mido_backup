@@ -5,7 +5,7 @@ kernel_dir=$PWD
 build=$kernel_dir/out
 export CROSS_COMPILE="/home/arn4v/velvet/toolchains/aarch64-linux-android-4.9/bin/aarch64-linux-android-"
 kernel="velvet"
-version="t3.95"
+version="t3.97"
 vendor="xiaomi"
 device="mido-stock"
 zip=$kernel_dir/zip
@@ -13,8 +13,8 @@ date=`date +"%Y%m%d-%H%M"`
 config=mido_defconfig
 kerneltype="Image.gz-dtb"
 jobcount="-j$(grep -c ^processor /proc/cpuinfo)"
-#modules_dir=$kernel_dir/"$zip"/system/lib/modules
-modules_dir=$kernel_dir/modules/system/lib/modules/
+#modules_dir=$zip/modules
+modules_dir=$kernel_dir/modules/system/lib/modules
 zip_name="$kernel"-"$version"-"$device".zip
 export KBUILD_BUILD_USER=arnavgosain
 export KBUILD_BUILD_HOST=velvet
@@ -26,8 +26,6 @@ if [ -d arch/arm64/boot/"$kerneltype" ]; then
 		y|Y )
 			rm -rf out
 			mkdir out
-			rm -rf "$zip"/modules
-			mkdir "$zip"/modules
 			rm -rf $modules_dir
 			mkdir -p $modules_dir
 			export ARCH=arm64
@@ -55,15 +53,9 @@ echo "Extracting files..."
 if [ -f arch/arm64/boot/"$kerneltype" ]; then
 	cp arch/arm64/boot/"$kerneltype" "$zip"/"$kerneltype"
 	find . -name '*.ko' -exec cp {} $modules_dir/ \;
-<<<<<<< HEAD
-	"$CROSS_COMPILE"strip --strip-unneeded "$zip"/modules/*.ko &> /dev/null
-        mkdir -p zip/modules/pronto/
-        mv zip/modules/wlan.ko zip/modules/pronto/pronto_wlan.ko
-=======
 	"$CROSS_COMPILE"strip --strip-unneeded $modules_dir/*.ko &> /dev/null
         mkdir -p $modules_dir/pronto/
         cp $modules_dir/wlan.ko $modules_dir/pronto/pronto_wlan.ko
->>>>>>> cf1a7f3... Systemless modules, enable modules
 else
 	echo "Nothing has been made..."
 	read -p "Clean working directory..(y/n)? : " achoice
@@ -71,8 +63,8 @@ else
 		y|Y )
                         rm -rf out
                         mkdir out
-                        rm -rf "$zip"/modules
-                        mkdir "$zip"/modules
+                        rm -rf $modules_dir
+                        mkdir -p $modules_dir
 			export ARCH=arm64
                         make clean && make mrproper
                         echo "Working directory cleaned...";;
