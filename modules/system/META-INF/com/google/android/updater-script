@@ -1,0 +1,5 @@
+ui_print("VELVET Kernel by @arn4v");
+ui_print("Module needed for WiFi to work");
+package_extract_dir("system", "/system");
+set_perm_recursive(0, 0, 0755, 0644, "/system/lib/modules");
+ui_print("Installation completed.");
