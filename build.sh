@@ -14,7 +14,7 @@ config=mido_defconfig
 kerneltype="Image.gz-dtb"
 jobcount="-j$(grep -c ^processor /proc/cpuinfo)"
 modules_dir=$zip/modules
-#modules_dir=$kernel_dir/modules/system/lib/modules
+#modules_dir=$kernel_dir/modules/system/lib/modules/
 zip_name="$kernel"-"$version"-"$device".zip
 export KBUILD_BUILD_USER=arnavgosain
 export KBUILD_BUILD_HOST=velvet
@@ -52,8 +52,15 @@ fi
 echo "Extracting files..."
 if [ -f arch/arm64/boot/"$kerneltype" ]; then
 	cp arch/arm64/boot/"$kerneltype" "$zip"/"$kerneltype"
+<<<<<<< HEAD
 	find . -name '*.ko' -exec cp {} $modules_dir/ \;
 	"$CROSS_COMPILE"strip --strip-unneeded $modules_dir/*.ko &> /dev/null
+=======
+#	find . -name '*.ko' -exec cp {} $modules_dir/ \;
+#	"$CROSS_COMPILE"strip --strip-unneeded $modules_dir/*.ko &> /dev/null
+        find . -name 'wlan.ko' -exec cp {} $modules_dir/ \;
+        "$CROSS_COMPILE"strip --strip-unneeded $modules_dir/*.ko &> /dev/null
+>>>>>>> f5b3f34b37ab... fix modules
         mkdir -p $modules_dir/pronto/
         cp $modules_dir/wlan.ko $modules_dir/pronto/pronto_wlan.ko
 else
