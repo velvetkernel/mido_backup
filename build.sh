@@ -52,15 +52,10 @@ fi
 echo "Extracting files..."
 if [ -f arch/arm64/boot/"$kerneltype" ]; then
 	cp arch/arm64/boot/"$kerneltype" "$zip"/"$kerneltype"
-<<<<<<< HEAD
-	find . -name '*.ko' -exec cp {} $modules_dir/ \;
-	"$CROSS_COMPILE"strip --strip-unneeded $modules_dir/*.ko &> /dev/null
-=======
 #	find . -name '*.ko' -exec cp {} $modules_dir/ \;
 #	"$CROSS_COMPILE"strip --strip-unneeded $modules_dir/*.ko &> /dev/null
         find . -name 'wlan.ko' -exec cp {} $modules_dir/ \;
         "$CROSS_COMPILE"strip --strip-unneeded $modules_dir/*.ko &> /dev/null
->>>>>>> f5b3f34b37ab... fix modules
         mkdir -p $modules_dir/pronto/
         cp $modules_dir/wlan.ko $modules_dir/pronto/pronto_wlan.ko
 else
@@ -104,6 +99,10 @@ if [ -f "$zip"/"$kerneltype" ]; then
 	rm "$kerneltype"
 	cd ..
 	rm -rf arch/arm64/boot/"$kerneltype"
+        echo "Generating changelog..."
+        git --no-pager log --pretty=oneline --abbrev-commit b198487ca65c0dafcaf9ac72cf1cf12f34aa5e4b..HEAD > zip/changelog.txt
+        paste zip/changelog.txt
+        rm zip/changelog.txt
 	export outdir=""$build""
         export out=""$build""
         export OUT=""$build""
