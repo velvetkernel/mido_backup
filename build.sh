@@ -5,7 +5,7 @@ kernel_dir=$PWD
 build=$kernel_dir/out
 export CROSS_COMPILE="/home/arn4v/velvet/toolchains/aarch64-linux-android-6.0-kernel/bin/aarch64-linux-android-"
 kernel="velvet"
-version="t3.95"
+version="r4"
 vendor="xiaomi"
 device="mido-beta"
 zip=$kernel_dir/zip
@@ -13,8 +13,8 @@ date=`date +"%Y%m%d-%H%M"`
 config=mido_defconfig
 kerneltype="Image.gz-dtb"
 jobcount="-j$(grep -c ^processor /proc/cpuinfo)"
-#modules_dir=$kernel_dir/"$zip"/system/lib/modules
-modules_dir=$kernel_dir/modules/system/lib/modules/
+modules_dir=$kernel_dir/"$zip"/modules
+#modules_dir=$kernel_dir/modules/system/lib/modules/
 zip_name="$kernel"-"$version"-"$device".zip
 export KBUILD_BUILD_USER=arnavgosain
 export KBUILD_BUILD_HOST=velvet
@@ -54,8 +54,8 @@ fi
 echo "Extracting files..."
 if [ -f arch/arm64/boot/"$kerneltype" ]; then
 	cp arch/arm64/boot/"$kerneltype" "$zip"/"$kerneltype"
-	find . -name '*.ko' -exec cp {} $modules_dir/ \;
-	"$CROSS_COMPILE"strip --strip-unneeded $modules_dir/*.ko &> /dev/null
+#	find . -name '*.ko' -exec cp {} $modules_dir/ \;
+#	"$CROSS_COMPILE"strip --strip-unneeded $modules_dir/*.ko &> /dev/null
         mkdir -p $modules_dir/pronto/
         cp $modules_dir/wlan.ko $modules_dir/pronto/pronto_wlan.ko
 else
@@ -91,7 +91,7 @@ fi
 echo "Zipping..."
 if [ -f "$zip"/"$kerneltype" ]; then
         cd modules
-        zip -r modules-$zip_name.zip .
+        zip -r modules-$zip_name .
         mv *.zip $build
 	cd "$zip"
 	zip -r ../$zip_name .
