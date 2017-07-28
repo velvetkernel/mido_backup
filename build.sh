@@ -5,7 +5,7 @@ kernel_dir=$PWD
 build=$kernel_dir/out
 export CROSS_COMPILE="/home/arn4v/velvet/toolchains/aarch64-linux-android-6.0-kernel/bin/aarch64-linux-android-"
 kernel="velvet"
-version="r4"
+version="r4.1"
 vendor="xiaomi"
 device="mido-los"
 zip=zip
@@ -97,7 +97,7 @@ if [ -f "$zip"/"$kerneltype" ]; then
 	cd ..
 	rm -rf arch/arm64/boot/"$kerneltype"
         echo "Generating changelog..."
-        git --no-pager log --pretty=oneline --abbrev-commit 5a78b82c579686457ad600ad4bdf3d6abd0311da..HEAD > zip/changelog.txt
+        git --no-pager log --pretty=oneline --abbrev-commit 299f8a88d11ab7dc5c5d11a3f2ac7c1f65687868..HEAD > zip/changelog.txt
         paste zip/changelog.txt
         rm zip/changelog.txt
 	export outdir=""$build""
