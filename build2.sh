@@ -13,7 +13,7 @@ date=`date +"%Y%m%d-%H%M"`
 config=mido_defconfig
 kerneltype="Image.gz-dtb"
 jobcount="-j$(grep -c ^processor /proc/cpuinfo)"
-if [[ "$2" =~ "magisk" ]];
+if [[ "$module" =~ "magisk" ]];
 then
     modules_dir=$kernel_dir/"$zip"/system/lib/modules
 else
@@ -56,6 +56,16 @@ echo "Package complete: "$build"/"$zip_name""
 exit 0;
 }
 
+function modulezip() {
+if [[ "$module" =~ "magisk" ]];
+then
+cd $kernel_dir/modules
+zip -r $build/modules-$zip_name .
+else
+exit 0
+fi
+}
+
 echo $zip_name
 echo $kernel_dir
 
@@ -64,6 +74,7 @@ then
     clean
     build
     kzip
+    modulezip
 else
     if [[ "$1" =~ "reset" ]];
     then
