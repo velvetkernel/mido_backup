@@ -53,6 +53,7 @@ export outdir=""$build""
 export out=""$build""
 export OUT=""$build""
 echo "Package complete: "$build"/"$zip_name""
+cd $kernel_dir
 exit 0;
 }
 
@@ -61,6 +62,7 @@ if [[ "$module" =~ "magisk" ]];
 then
 cd $kernel_dir/modules
 zip -r $build/modules-$zip_name .
+cd $kernel_dir
 else
 exit 0
 fi
