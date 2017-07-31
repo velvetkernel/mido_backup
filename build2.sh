@@ -7,15 +7,15 @@ export CROSS_COMPILE="/home/arn4v/velvet/toolchains/aarch64-linux-android-6.0-ke
 kernel="velvet"
 version="r4.1"
 vendor="xiaomi"
-device="mido-los"
+device="mido-beta"
 zip=zip
 date=`date +"%Y%m%d-%H%M"`
 config=mido_defconfig
 kerneltype="Image.gz-dtb"
 jobcount="-j$(grep -c ^processor /proc/cpuinfo)"
-if [[ "$module" =~ "magisk" ]];
+if [ $module == "magisk" ];
 then
-    modules_dir=$kernel_dir/"$zip"/system/lib/modules
+    modules_dir=$kernel_dir/modules/system/lib/modules
 else
     modules_dir=$kernel_dir/"$zip"/modules
 fi
@@ -26,6 +26,8 @@ export KBUILD_BUILD_HOST=velvet
 function clean() {
 rm -rf out
 mkdir out
+rm -rf $modules_dir
+mkdir -p $modules_dir
 export ARCH=arm64
 make clean && make mrproper
 }
@@ -57,15 +59,10 @@ cd $kernel_dir
 exit 0;
 }
 
-function modulezip() {
-if [[ "$module" =~ "magisk" ]];
-then
-cd $kernel_dir/modules
+function modzip() {
+cd modules
 zip -r $build/modules-$zip_name .
 cd $kernel_dir
-else
-exit 0
-fi
 }
 
 echo $zip_name
@@ -75,8 +72,9 @@ if [[ "$1" =~ "cleanbuild" ]];
 then
     clean
     build
+    modzip
     kzip
-    modulezip
+    cd $kernel_dir
 else
     if [[ "$1" =~ "reset" ]];
     then
