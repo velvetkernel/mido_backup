@@ -43,6 +43,7 @@ cp $modules_dir/wlan.ko $modules_dir/pronto/pronto_wlan.ko
 }
 
 function kzip() {
+rm ${HOME}/velvet/builderbot/velvet.py
 cd $kernel_dir/$zip
 zip -r $build/$zip_name .
 rm "$kerneltype"
@@ -55,7 +56,7 @@ export outdir=""$build""
 export out=""$build""
 export OUT=""$build""
 echo "Package complete: "$build"/"$zip_name""
-cd $kernel_dir
+echo "filename = '$build/$zip_name'" >> ${HOME}/velvet/builderbot/velvet.py
 exit 0;
 }
 
